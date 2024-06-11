@@ -11,7 +11,7 @@ class ReviewController extends Controller
     {
        
         $reviews = Review::all();
-        return view('reviews.review', compact('reviews'));
+        return view('reviews.index', compact('reviews'));
     }
 
     public function create()
@@ -31,12 +31,32 @@ class ReviewController extends Controller
     
         Review::create($validatedData);
     
-        return redirect('/review')->with('success', 'Movie added successfully!');
+        return redirect('/reviews')->with('success', 'Movie added successfully!');
     }
 
-    public function destroy(Review $review)
-{
-    $review->delete();
-    return redirect('/review')->with('success', 'Movie deleted successfully!');
-}
+    public function edit(Review $review)
+    {
+        $movies = Movie::all();
+        return view('reviews.edit', compact('review', 'movies'));
+    }
+
+    public function update(Request $request, Review $review)
+    {
+        $validatedData = $request->validate([
+            'movie_id' => 'required',
+            'user' => 'required',
+            'rating' => 'required',
+            'date' => 'required',
+        ]);
+
+        $review->update($validatedData);
+
+        return redirect('/reviews')->with('success', 'Review updated successfully!');
+    }
+
+        public function destroy(Review $review)
+    {
+        $review->delete();
+        return redirect('/reviews')->with('success', 'Review deleted successfully!');
+    }
 }

@@ -10,7 +10,7 @@ class GenreController extends Controller
     {
        
         $genres = Genre::all();
-        return view('genres.genre', compact('genres'));
+        return view('genres.index', compact('genres'));
     }
 
 
@@ -21,22 +21,40 @@ class GenreController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'name' => 'required',
-        'description' => 'required',
-       
-    ]);
+    {
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+        
+        ]);
 
-    Genre::create($validatedData);
+        Genre::create($validatedData);
 
-    return redirect('/genres')->with('success', 'Movie added successfully!');
-}
+        return redirect('/genres')->with('success', 'Movie added successfully!');
+    }
 
-public function destroy(Genre $genre)
-{
-    $genre->delete();
-    return redirect('/genres')->with('success', 'Movie deleted successfully!');
-}
+    public function edit(Genre $genre)
+    {
+      
+        return view('genres.index');
+    }
+
+    public function update(Request $request, Genre $genre)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'desription' => 'required',
+        ]);
+
+        $genre->update($validatedData);
+
+        return redirect('/genres')->with('success', 'Genre updated successfully!');
+    }
+
+    public function destroy(Genre $genre)
+    {
+        $genre->delete();
+        return redirect('/genres')->with('success', 'Genre deleted successfully!');
+    }
 
 }
